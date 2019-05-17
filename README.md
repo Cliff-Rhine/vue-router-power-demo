@@ -1,29 +1,47 @@
 # vue-router-power-demo
 
-## Project setup
-```
-yarn install
-```
+vue角色不同动态分配路由权限，实现权限控制，核心内容有两点，一是保持用户登录状态，二是根据用登录的用户角色判断路由
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+## 使用vuex保持用户登录
 
-### Compiles and minifies for production
-```
-yarn run build
-```
+1. 点击登录按钮，使用vuex的actions分发登录操作，发送用户名和密码到后台获取登录token， 并存入vuex的state和cookie中
+2. 使用导航守卫，每次跳转页面的时候检查是否有token，以此来判断用户是否登录
 
-### Run your tests
-```
-yarn run test
-```
+## 动态分配路由权限
 
-### Lints and fixes files
-```
-yarn run lint
-```
+1. 登录成功后拉去用户信息，包括用户角色，用户名等信息
+2. 根据用户角色动态添加路由
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 实现思路
+
+用户登录状态和路由权限的分配都是全局状态，在实际操作上体现为：每进入一个页面，都需要判断用户的登录状态和权限，所以整体判断需要在前置导航守卫中完成
+
+### store中的状态设置
+
+1. state：token（用户登录获取的token），role（用户角色信息），name（用户信息1），avatar（用户信息2）。。。
+
+2. mutations：set_token, set_role, set_name, set_avatar...主要用于更改state的值
+
+3. actions：login（利用axios与后台交互，获取登录token，并将token存于state和cookie），getInfo（利用state中的token值与后台交互，获取用户信息，包括用户角色，名字等）， logout（与后台交互，取消服务器的登录状态，并删除前端state，cookie中的token）
+
+### router列表中每个路由地址的登录权限设置
+
+1. 定义两个或多个路由表，根据项目需求或个人习惯
+
+2. 设置路由表，使用`meta.roles`为每个路由设置可以使用的角色
+
+### beforeEach中的状态判断
+
+1. 根据store中的token状态判断是否登录，因为每次刷新页面vuex的状态都会重置，所以store中的token的初始状态需要从cookie中获取
+
+2. token值存在则表示用户已登录，反之则表示未登录
+
+3. 用户已登录
+  1. 判断进入页面是否为登录页，如果是登录页，则检查是否有重定向参数，有重定向则跳转到重定向页面，没有则跳转到首页
+  2. 不是登录页，检查store中是否有角色信息，没有角色信息则拉取用户信息（actions中的getInfo）
+  3. 路由判断有两种方式，一是通过`meta.roles`进行信息比对判断，二是通过角色信息动态挂载路由表，没有权限的则会进入404页面
+
+4. 用户未登录
+  1. 判断进入页面是否需要登录，实现形式有两种方法，一是根据路由表中定义的`meta.auth`信息判断，二是定义个路由白名单，在该名单中的路由地址都不需要登录
+  2. 如果页面需要登录，跳转至登录页，并附带重定向参数，以便用户在登录后跳转到原本要进入的页面
+  3. 如果页面不需要登录，直接`next()`对其放行

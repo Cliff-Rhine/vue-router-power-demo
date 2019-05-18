@@ -1,16 +1,22 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import getters from './getters'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
-  state: {
+const moduleFiles = require.context('./modules', false, /\.js$/)
 
-  },
-  mutations: {
+const modules = moduleFiles.keys().reduce((modules, modeluePath) => {
+  const moduleName = modeluePath.replace(/^\.\/(.*)\.\w+$/, '$1')
 
-  },
-  actions: {
+  const value = moduleFiles(modeluePath)
+  modules[moduleName] = value.default
+  return modules
+}, {})
 
-  }
+const store = new Vuex.Store({
+  modules,
+  getters
 })
+
+export default store

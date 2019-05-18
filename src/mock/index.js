@@ -6,7 +6,7 @@ const get = url => {
   const host = 'http://' + location.host + '/'
   const arg = new URL(url, host)
   const api = arg.pathname
-  const params = query.parse(arg.searchParams.slice(1))
+  const params = query.parse(arg.search.slice(1))
   return { api, params }
 }
 

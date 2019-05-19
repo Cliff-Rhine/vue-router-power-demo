@@ -1,23 +1,24 @@
+'use strict'
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import layout from '@/layout'
-
 Vue.use(Router)
 
-export default new Router({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes: [
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('@/views/login')
-    },
-    {
-      path: '/',
-      name: 'home',
-      component: layout
-    }
-  ]
+// Separate constantRoutes and asyncRoutes to make logic and structure clearer
+export const constantRoutes = require('./constantRoutes').default
+export const asyncRoutes = require('./asyncRoutes').default
+
+const createRouter = () => new Router({
+  mode: 'history', // require service support
+  routes: constantRoutes
 })
+
+const router = createRouter()
+
+// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
+export const resetRouter = () => {
+  const newRouter = createRouter()
+  router.matcher = newRouter.matcher // reset router
+}
+
+export default router

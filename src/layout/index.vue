@@ -1,7 +1,12 @@
 <template>
   <el-container>
     <cl-header></cl-header>
-    <cl-aside></cl-aside>
+    <el-container>
+      <cl-side-bar></cl-side-bar>
+      <keep-alive>
+        <router-view />
+      </keep-alive>
+    </el-container>
     <el-footer height="0"></el-footer>
   </el-container>
 </template>
@@ -9,8 +14,8 @@
 <script>
 export default {
   components: {
-    'cl-header': () => import('./modules/cl-header'),
-    'cl-aside': () => import('./modules/cl-aside')
+    'cl-header': () => import('./components/header'),
+    'cl-side-bar': () => import('./components/sidebar')
   }
 }
 </script>

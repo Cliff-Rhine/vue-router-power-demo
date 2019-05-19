@@ -11,9 +11,15 @@
 
 <script>
 export default {
+  data: function () {
+    return {
+      loading: false
+    }
+  },
   methods: {
     login: function (parmas) {
       this.loading = true
+      window.console.log('click login button')
 
       this.$store.dispatch('login', parmas).then(response => {
         this.loading = false
@@ -28,36 +34,36 @@ export default {
         }
       })
     },
+
     loginAsUser: function () {
       const parmas = {
         username: 'user',
         password: '123456'
       }
-
       this.login(parmas)
     },
+
     loginAsAdmin: function () {
       const parmas = {
         username: 'admin',
         password: '123456'
       }
-
       this.login(parmas)
     },
+
     loginAsSuperAdmin: function () {
       const parmas = {
         username: 'superadmin',
         password: '123456'
       }
-
       this.login(parmas)
     },
+
     loginAsFailed: function () {
       const parmas = {
         username: 'superadmin',
         password: '123456'
       }
-
       this.login(parmas)
     }
   }

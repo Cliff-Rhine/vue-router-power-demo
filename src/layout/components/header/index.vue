@@ -9,15 +9,21 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   computed: {
-    name: function () {
-      return 'name'
-    }
+    ...mapGetters([
+      'name'
+    ])
   },
   methods: {
     logout: function () {
-
+      this.$store.dispatch('logout').then(res => {
+        window.console.log('logout...')
+        // has bug, if go / and error
+        this.$router.push('/login')
+      })
     }
   }
 }

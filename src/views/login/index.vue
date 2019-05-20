@@ -21,7 +21,8 @@
 export default {
   data: function () {
     return {
-      loading: false
+      loading: false,
+      notifies: []
     }
   },
   methods: {
@@ -33,13 +34,22 @@ export default {
         this.loading = false
 
         if (response.code) {
+          this.clearNotifies()
           this.$router.push('/')
         } else {
-          this.$notify({
+          const instance = this.$notify({
             type: 'error',
             title: response.msg
           })
+
+          this.notifies.push(instance)
         }
+      })
+    },
+
+    clearNotifies: function () {
+      this.notifies.forEach(notify => {
+        notify.close()
       })
     },
 

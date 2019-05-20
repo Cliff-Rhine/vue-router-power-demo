@@ -69,7 +69,7 @@ export default {
 
     loginAsFailed: function () {
       const parmas = {
-        username: 'superadmin',
+        username: '123456',
         password: '123456'
       }
       this.login(parmas)

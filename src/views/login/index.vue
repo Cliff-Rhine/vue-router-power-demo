@@ -1,10 +1,18 @@
 <template>
   <el-container>
     <div class="wrap">
-      <el-button @click="loginAsUser">登录为普通用户</el-button>
-      <el-button @click="loginAsAdmin">登录为管理员</el-button>
-      <el-button @click="loginAsSuperAdmin">登录为超级管理员</el-button>
-      <el-button @click="loginAsFailed">登录为无效人员</el-button>
+      <el-row>
+        <el-button type="primary" @click="loginAsUser">登录为普通用户</el-button>
+      </el-row>
+      <el-row>
+        <el-button type="primary" @click="loginAsAdmin">登录为管理员</el-button>
+      </el-row>
+      <el-row>
+        <el-button type="primary" @click="loginAsSuperAdmin">登录为超级管理员</el-button>
+      </el-row>
+      <el-row>
+        <el-button type="primary" @click="loginAsFailed">登录为无效人员</el-button>
+      </el-row>
     </div>
   </el-container>
 </template>

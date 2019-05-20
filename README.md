@@ -69,7 +69,7 @@ src
 
 ### `permission.js`
 
-放置全局导航守卫，和文件名一样，对用户的跳转行为进行判断，主要是利用`vuex.store`中的token和role进行判断，并完成路由的动态加载行为
+放置全局导航守卫，和文件名含义一样，对用户的跳转行为进行许可判断，主要是利用`vuex.store`中的token和role进行判断，并完成路由的动态加载行为
 
 ### `store/modules/user.js`
 

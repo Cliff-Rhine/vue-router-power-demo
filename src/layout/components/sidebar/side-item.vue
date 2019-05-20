@@ -1,20 +1,13 @@
 <template>
   <li v-if="!item.hidden">
-    <router-link v-if="!item.submenu && getOnlyOneChild(item.children, item)" :to="onlyChild.path">
-      <el-menu-item>{{onlyChild.meta.title}}</el-menu-item>
-    </router-link>
-
-    <el-submenu v-else :index="item.path">
-      <template slot="title">
+    <router-link :to="resolve()">
+      <el-menu-item
+        :index="index"
+      >
         <i :class="icon"></i>
-        <span>{{item.meta.title}}</span>
-      </template>
-      <side-item
-        v-for="child in item.children"
-        :key="child.path"
-        :item="child"
-      ></side-item>
-    </el-submenu>
+        <span>{{item.children[0].meta.title}}</span>
+      </el-menu-item>
+    </router-link>
   </li>
 </template>
 
@@ -29,33 +22,28 @@ export default {
   },
   computed: {
     icon: function () {
-      return 'el-icon-' + this.item.meta.icon
+      return 'el-icon-' + this.item.children[0].meta.icon
     }
   },
   data: function () {
     return {
+      index: '',
       onlyChild: null
     }
   },
   methods: {
-    getOnlyOneChild: function (children = [], parent) {
-      // filter children
-      const showingChildren = children.filter(item => {
-        if (item.hidden) {
-          return false
-        } else {
-          return true
-        }
-      })
-
-      window.console.log(showingChildren)
-      if (showingChildren.length === 0) {
-        this.onlyChild = parent
-        return true
-      } else if (showingChildren.length === 1) {
-        this.onlyChild = showingChildren[0]
-        return true
+    resolve: function () {
+      const baseUrl = this.item.path
+      let childUrl
+      if (this.item.children) {
+        childUrl = '/' + this.item.children[0].path
+      } else {
+        childUrl = ''
       }
+      const path = baseUrl + childUrl
+      this.index = path
+      window.console.log(path)
+      return path
     }
   }
 }

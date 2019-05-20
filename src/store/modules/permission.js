@@ -7,8 +7,8 @@ import { asyncRoutes, constantRoutes } from '@/router'
  * @param role
  */
 const hasPermission = (route, role) => {
+  // if has meta.roles, to judge the role
   if (route.meta && route.meta.roles) {
-    window.console.log(route.meta.roles, role)
     if (route.meta.roles.includes(role)) {
       return true
     } else {
@@ -28,6 +28,7 @@ export const filterAsyncRoutes = (routes, role) => {
   const res = []
 
   routes.forEach(route => {
+    // Preventing pollution of authority
     const tmp = {
       ...route
     }
@@ -36,7 +37,11 @@ export const filterAsyncRoutes = (routes, role) => {
         tmp.children = filterAsyncRoutes(tmp.children, role)
       }
 
-      res.push(tmp)
+      // fix route.children is empty
+      const childSize = tmp.children && tmp.children.length > 0
+      if (!tmp.children || childSize) {
+        res.push(tmp)
+      }
     }
   })
 
@@ -65,6 +70,7 @@ permission.actions = {
       accessRoutes = filterAsyncRoutes(asyncRoutes, rootGetters.role)
       commit('set_route', accessRoutes)
 
+      window.console.log(accessRoutes)
       resolve(accessRoutes)
     })
   }

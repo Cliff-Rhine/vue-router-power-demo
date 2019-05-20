@@ -1,10 +1,10 @@
 <template>
   <div>
-    <el-menu>
+    <el-menu :default-active="activeMenu">
       <cl-side-item
-        v-for="item in permission_routes"
-        :key="item.path"
-        :item="item"
+        v-for="(route, index) in permission_routes"
+        :key="index"
+        :item="route"
       ></cl-side-item>
     </el-menu>
   </div>
@@ -20,11 +20,15 @@ export default {
     ]),
 
     activeMenu () {
+      window.console.log('active menu is ' + this.$route.path)
       return this.$route.path
     }
   },
   components: {
     'cl-side-item': () => import('./side-item')
+  },
+  mounted: function () {
+    // window.console.log(this.item.path)
   }
 }
 </script>

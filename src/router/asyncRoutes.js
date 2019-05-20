@@ -4,13 +4,13 @@ import layout from '@/layout'
 const asyncRoutes = [
   {
     path: '/permission',
-    name: 'permission',
+    redirect: '/permission/user',
+    hidden: true
+  },
+
+  {
+    path: '/permission',
     component: layout,
-    submenu: true,
-    meta: {
-      icon: 's-platform',
-      title: '权限测试页'
-    },
     children: [
       {
         path: 'page',
@@ -21,7 +21,14 @@ const asyncRoutes = [
           title: '管理系统',
           roles: ['admin', 'superadmin']
         }
-      },
+      }
+    ]
+  },
+
+  {
+    path: '/permission',
+    component: layout,
+    children: [
       {
         path: 'user',
         name: 'permission-user',
@@ -31,7 +38,14 @@ const asyncRoutes = [
           title: '权限浏览',
           roles: ['admin', 'superadmin', 'user']
         }
-      },
+      }
+    ]
+  },
+
+  {
+    path: '/permission',
+    component: layout,
+    children: [
       {
         path: 'super',
         name: 'permission-super',
@@ -47,16 +61,11 @@ const asyncRoutes = [
 
   {
     path: '/page1',
-    name: 'page1',
     component: layout,
-    submenu: true,
-    meta: {
-      icon: 's-promotion',
-      title: '多级菜单'
-    },
     children: [
       {
         path: '',
+        name: 'page1',
         meta: {
           icon: 'location',
           title: 'page1'
@@ -68,11 +77,11 @@ const asyncRoutes = [
 
   {
     path: '/page2',
-    name: 'page2',
     component: layout,
     children: [
       {
         path: '',
+        name: 'page2',
         meta: {
           icon: 'picture',
           title: 'page2'
